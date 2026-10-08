@@ -1,4 +1,5 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/LeaveManagement.Domain/LeaveManagement.Domain.csproj" />
   </Folder>
 </Solution>
