@@ -5,4 +5,7 @@
     <Project Path="src/LeaveManagement.Infrastructure/LeaveManagement.Infrastructure.csproj" />
     <Project Path="src/LeaveManagement.Api/LeaveManagement.Api.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/LeaveManagement.Tests/LeaveManagement.Tests.csproj" />
+  </Folder>
 </Solution>
