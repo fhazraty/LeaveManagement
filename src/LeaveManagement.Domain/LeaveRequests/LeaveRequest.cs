@@ -12,6 +12,7 @@ public sealed class LeaveRequest : Entity
     public Guid? DecidedBy { get; private set; }
     public DateTimeOffset? DecidedAt { get; private set; }
     public string? RejectionReason { get; private set; }
+    public DateTimeOffset? CanceledAt { get; private set; }
 
     private LeaveRequest() { } // EF Core
 
@@ -41,6 +42,14 @@ public sealed class LeaveRequest : Entity
         DecidedAt = now;
     }
 
+    public void Cancel(Guid employeeId, DateTimeOffset now)
+    {
+        EnsureCanBeCanceledBy(employeeId, now);
+        Status = LeaveStatus.Canceled;
+        CanceledAt = now;
+    }
+    
+
     public void Reject(Guid managerId, string reason, DateTimeOffset now)
     {
         if (string.IsNullOrWhiteSpace(reason))
@@ -59,5 +68,15 @@ public sealed class LeaveRequest : Entity
             throw new DomainException("فقط درخواست در انتظار بررسی قابل تصمیم‌گیری است.");
         if (managerId == EmployeeId)
             throw new DomainException("هیچ‌کس نمی‌تواند درباره مرخصی خودش تصمیم بگیرد.");
+    }
+
+    private void EnsureCanBeCanceledBy(Guid employeeId, DateTimeOffset now)
+    {
+        if (Status != LeaveStatus.Pending || Status != LeaveStatus.Approved)
+            throw new DomainException("فقط درخواست در انتظار بررسی یا تایید شده قابل تصمیم‌گیری است.");
+        if (Period.Start >= DateOnly.FromDateTime(now.UtcDateTime))
+            throw new DomainException("مرخصی شروع شده را نمی توان لغو کرد.");
+        if (employeeId != EmployeeId)
+            throw new DomainException("هیچ‌کس نمی‌تواند مرخصی شخص دیگر را لغو.");
     }
 }

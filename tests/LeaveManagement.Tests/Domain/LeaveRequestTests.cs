@@ -65,4 +65,12 @@ public sealed class LeaveRequestTests
     [Fact]
     public void Reject_WithoutReason_IsRejected()
         => Assert.Throws<DomainException>(() => NewRequest().Reject(Manager, " ", Now));
+
+    [Fact]
+    public void Cancel_By_Others_IsRejected()
+        => Assert.Throws<DomainException>(() => NewRequest().Cancel(Manager, Now));
+
+    [Fact]
+    public void StartDay_Haspassed_IsRejected()
+        => Assert.Throws<DomainException>(() => NewRequest().Cancel(Employee, Now.AddDays(1)));
 }

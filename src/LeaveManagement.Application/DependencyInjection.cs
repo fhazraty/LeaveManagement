@@ -1,5 +1,6 @@
 using LeaveManagement.Application.LeaveBalances.GetBalance;
 using LeaveManagement.Application.LeaveRequests.Approve;
+using LeaveManagement.Application.LeaveRequests.Cancel;
 using LeaveManagement.Application.LeaveRequests.GetById;
 using LeaveManagement.Application.LeaveRequests.Reject;
 using LeaveManagement.Application.LeaveRequests.Submit;
@@ -19,6 +20,7 @@ public static class DependencyInjection
         services.AddScoped<SubmitLeaveRequestHandler>();
         services.AddScoped<ApproveLeaveRequestHandler>();
         services.AddScoped<RejectLeaveRequestHandler>();
+        services.AddScoped<CancelLeaveRequestHandler>();
         services.AddScoped<GetLeaveRequestHandler>();
         services.AddScoped<GetLeaveBalanceHandler>();
         return services;

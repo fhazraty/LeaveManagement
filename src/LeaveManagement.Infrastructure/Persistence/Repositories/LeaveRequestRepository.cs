@@ -13,6 +13,7 @@ internal sealed class LeaveRequestRepository(LeaveDbContext db) : ILeaveRequestR
         => db.LeaveRequests.AnyAsync(x =>
             x.EmployeeId == employeeId &&
             x.Status != LeaveStatus.Rejected &&
+            x.Status != LeaveStatus.Canceled &&
             x.Period.Start <= period.End &&
             period.Start <= x.Period.End, ct);
 

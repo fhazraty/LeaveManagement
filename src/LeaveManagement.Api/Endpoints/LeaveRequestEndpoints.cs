@@ -1,5 +1,6 @@
 using LeaveManagement.Application.LeaveBalances.GetBalance;
 using LeaveManagement.Application.LeaveRequests.Approve;
+using LeaveManagement.Application.LeaveRequests.Cancel;
 using LeaveManagement.Application.LeaveRequests.GetById;
 using LeaveManagement.Application.LeaveRequests.Reject;
 using LeaveManagement.Application.LeaveRequests.Submit;
@@ -37,6 +38,13 @@ public static class LeaveRequestEndpoints
             return Results.NoContent();
         });
 
+        group.MapPost("/{id:guid}/Cancel", async (Guid id, DecisionBody body,
+            CancelLeaveRequestHandler handler, CancellationToken ct) =>
+        {
+            await handler.HandleAsync(new CancelLeaveRequestCommand(id, body.EmployeeId), ct);
+            return Results.NoContent();
+        });
+
         app.MapGet("/api/employees/{employeeId:guid}/leave-balance", async (Guid employeeId,
             GetLeaveBalanceHandler handler, CancellationToken ct) =>
             Results.Ok(await handler.HandleAsync(new GetLeaveBalanceQuery(employeeId), ct)));
@@ -45,5 +53,5 @@ public static class LeaveRequestEndpoints
     }
 
     // برای سادگی نمونه؛ در سامانه واقعی شناسه مدیر از کاربر احراز هویت‌شده خوانده می‌شود.
-    public sealed record DecisionBody(Guid ManagerId, string? Reason);
+    public sealed record DecisionBody(Guid ManagerId, Guid EmployeeId, string? Reason);
 }

@@ -14,6 +14,7 @@ internal sealed class FakeLeaveRequestRepository : ILeaveRequestRepository
         => Task.FromResult(Items.Any(x =>
             x.EmployeeId == employeeId &&
             x.Status != LeaveStatus.Rejected &&
+            x.Status != LeaveStatus.Canceled &&
             x.Period.Overlaps(period)));
 
     public Task<IReadOnlyList<LeavePeriod>> GetActivePeriodsAsync(
